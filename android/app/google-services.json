@@ -1,0 +1,83 @@
+{
+  "project_info": {
+    "project_number": "571659888014",
+    "firebase_url": "https://flutter-fcce6.firebaseio.com",
+    "project_id": "flutter-fcce6",
+    "storage_bucket": "flutter-fcce6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571659888014:android:1d716e1c67dc1d4bf370df",
+        "android_client_info": {
+          "package_name": "com.example.flutter_auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571659888014-u5du41phes8k15j5ddevnr1e1injcrb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhefZRcwZiXV6urMb8I1fOFc-oZSKmRI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571659888014-u5du41phes8k15j5ddevnr1e1injcrb9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "571659888014-fk6nu7asc59r76feovgk1lotoe41tme4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dbaeka.rook"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:571659888014:android:ee023b2701418f6af370df",
+        "android_client_info": {
+          "package_name": "com.ghdecides.GHDecides2020"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "571659888014-u5du41phes8k15j5ddevnr1e1injcrb9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhefZRcwZiXV6urMb8I1fOFc-oZSKmRI8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "571659888014-u5du41phes8k15j5ddevnr1e1injcrb9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "571659888014-fk6nu7asc59r76feovgk1lotoe41tme4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dbaeka.rook"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
