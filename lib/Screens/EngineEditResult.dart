@@ -7,28 +7,28 @@ import 'package:flutter_auth/modals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sweetalert/sweetalert.dart';
 
-class AdminEditResult extends StatefulWidget {
+class EngineEditResult extends StatefulWidget {
   //final Map payload;
   final String id;
 
   // receive data from the FirstScreen as a parameter
   //AdminEditResult({Key key, @required this.payload}) : super(key: key);
 
-  AdminEditResult({Key key, @required this.id}) : super(key: key);
+  EngineEditResult({Key key, @required this.id}) : super(key: key);
 
   @override
   //AdminEditResultState createState() => AdminEditResultState(payload: payload);
-  AdminEditResultState createState() => AdminEditResultState(id: id);
+  EngineEditResultState createState() => EngineEditResultState(id: id);
 }
 
-class AdminEditResultState extends State<AdminEditResult> {
+class EngineEditResultState extends State<EngineEditResult> {
   //final Map payload;
   final String id;
 
   //TextEditingController _msgController = new TextEditingController();
 
   // receive data from the FirstScreen as a parameter
-  AdminEditResultState({Key key, @required this.id}) : super();
+  EngineEditResultState({Key key, @required this.id}) : super();
 
   GlobalKey<ScaffoldState> scaffoldKey;
 
@@ -85,10 +85,11 @@ class AdminEditResultState extends State<AdminEditResult> {
       payload = loadedData["data"]["attributes"]["records"];
       payload["remark"] = loadedData["data"]["attributes"]["remark"];
       payload["stationId"] = loadedData["data"]["attributes"]["station_code"];
-      payload["recent_image"]=loadedData["data"]["attributes"]["recent_image"];
+      payload["recent_image"] =
+          loadedData["data"]["attributes"]["recent_image"];
 
-      /*print("New Pyalooad " + payload.toString());
-      return;*/
+      //print("New Pyalooad " + payload.toString());
+      //return;
 
       _npp.text = payload["1"].toString();
       _ndc.text = payload["2"].toString();
@@ -142,13 +143,14 @@ class AdminEditResultState extends State<AdminEditResult> {
                             child: Container(
                               margin: EdgeInsets.all(30),
                               child: Center(
-                                child:
-                                    Text("STATION ID:  " + payload["stationId"],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue[900],
-                                          fontSize: 14,
-                                        )),
+                                child: Text(
+                                    "STATION ID:  " +
+                                        payload["stationId"].toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue[900],
+                                      fontSize: 14,
+                                    )),
                               ),
                             ),
                           ),
@@ -440,7 +442,7 @@ class AdminEditResultState extends State<AdminEditResult> {
                                             child: Text(
                                               "STATION REMARK OR COMMENT",
                                             ))),
-                                    Text(payload["remark"],
+                                    Text(payload["remark"].toString(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.blue[900],
@@ -485,7 +487,7 @@ class AdminEditResultState extends State<AdminEditResult> {
                                     press: () async {
                                       Map post = {
                                         "data": {
-                                          "id": payload["id"],
+                                          "id": id,
                                           "type": "results",
                                           "attributes": {
                                             "records": {
@@ -506,6 +508,8 @@ class AdminEditResultState extends State<AdminEditResult> {
                                         }
                                       };
 
+                                      //print(post);
+                                      //return;
                                       //send the data to update
                                       //saveEditedResults
                                       final SharedPreferences prefs =

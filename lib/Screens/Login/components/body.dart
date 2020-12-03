@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Dashboard/dashboard_screen.dart';
 import 'package:flutter_auth/Screens/Login/components/background.dart';
 import 'package:flutter_auth/Screens/SingleResultDetails.dart';
-import 'package:flutter_auth/Screens/TVRoomScreen.dart';
 import 'package:flutter_auth/modals.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_field.dart';
@@ -117,10 +116,8 @@ class LoginState extends State<Body> {
   }
 
   void _loadAllApproved() async {
-    //String results = await MyFunctions.getAllResults();
+  
     String feedback = await MyFunctions.getAllApproved();
-
-    //print(feedback);
 
     setState(() {
       allApproved = jsonDecode(feedback);
@@ -133,6 +130,24 @@ class LoginState extends State<Body> {
     setState(() {
       allPendings = jsonDecode(data);
     });
+  }
+
+  _engineViewDetailPage(data) {
+     //print(data);
+    //return;
+    String id = data["attributes"]["recent_result"].toString();
+    //print(id);
+   //return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return AdminViewDetails(
+              id: id //allStations["data"][i]["attributes"]["name"]
+              );
+        },
+      ),
+    );
   }
 
   @override
@@ -265,13 +280,578 @@ class LoginState extends State<Body> {
             )),
           )
         : (screenDecider == "display")
-            ? Container(
+            ? Background(
                 child: Container(
-                color: Colors.black54,
+                margin: EdgeInsets.all(10),
                 child: (finalResult == null)
                     ? Center(
                         child: Container(child: CircularProgressIndicator()))
-                    : TVRoomScreen(data: finalResult,)
+                    : (finalResult["data"].length == 0)
+                        ? Container(
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Center(
+                                child: Container(
+                                    width: size.width * 0.45,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50),
+                                      color: Colors.grey[200],
+                                    ),
+                                    child: Image.asset(
+                                      'assets/images/gh-decides.png',
+                                      fit: BoxFit.contain,
+                                    ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                    ),
+                              ),
+                              Row(children: <Widget>[
+                                Expanded(
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            width: size.width * 0.45,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: Colors.grey[200],
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/npp.png',
+                                              fit: BoxFit.contain,
+                                            ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                            ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    child: Column(
+                                      children: [
+                                        Container(
+                                            width: size.width * 0.45,
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(50),
+                                              color: Colors.grey[200],
+                                            ),
+                                            child: Image.asset(
+                                              'assets/images/ndc.png',
+                                              fit: BoxFit.contain,
+                                            ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                            ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ]),
+                            ],
+                          ))
+                        : SingleChildScrollView(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Center(
+                                    child: Container(
+                                        width: size.width * 0.45,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          color: Colors.grey[200],
+                                        ),
+                                        child: Image.asset(
+                                          'assets/images/gh-decides.png',
+                                          fit: BoxFit.contain,
+                                        ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                        ),
+                                  ),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                width: size.width * 0.45,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.grey[200],
+                                                ),
+                                                child: Image.asset(
+                                                  'assets/images/npp.png',
+                                                  fit: BoxFit.contain,
+                                                ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                                ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                                width: size.width * 0.45,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(50),
+                                                  color: Colors.grey[200],
+                                                ),
+                                                child: Image.asset(
+                                                  'assets/images/ndc.png',
+                                                  fit: BoxFit.contain,
+                                                ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                                ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Container(
+                                    child: FlatButton(
+                                      onPressed: () {
+                                        toast("Refreshing...");
+                                        _finalResult();
+                                      },
+                                      child: Text("The Numbers".toUpperCase(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.blue[300])),
+                                    ),
+                                  ),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                          margin: EdgeInsets.only(right: 10),
+                                          //width: size.width * 0.45,
+                                          height: size.width * 0.25,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.grey[200],
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: AssetImage(
+                                                      'assets/images/nana.png'))),
+                                          child: Container(
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    bottom: 5, right: 5),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      margin:
+                                                          EdgeInsets.all(10),
+                                                      child: Text("AKUFO ADDO",
+                                                          style: TextStyle(
+                                                              fontSize: 35.00,
+                                                              color: Color(
+                                                                  0xFFF2F2F2))),
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            size.height * 0.06),
+                                                    //Divider(),
+                                                    Text(
+                                                        finalResult["data"][0]
+                                                                    ["percent"]
+                                                                .toString() +
+                                                            " %",
+                                                        style: TextStyle(
+                                                            fontSize: 50.00,
+                                                            color: Color(
+                                                                0xFFF1F1F1))),
+
+                                                    SizedBox(
+                                                        height:
+                                                            size.height * 0.06),
+                                                    //Divider(),
+                                                    Text(
+                                                      finalResult["data"][0]
+                                                              ["sum"]
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.grey[50],
+                                                        fontSize: 30.00,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                          ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                          margin: EdgeInsets.only(right: 10),
+                                          //width: size.width * 0.45,
+                                          height: size.width * 0.25,
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              color: Colors.grey[200],
+                                              image: DecorationImage(
+                                                  fit: BoxFit.fill,
+                                                  image: AssetImage(
+                                                      'assets/images/jm.png'))),
+                                          child: Container(
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Container(
+                                                margin: EdgeInsets.only(
+                                                    bottom: 5, right: 5),
+                                                child: Column(
+                                                  children: [
+                                                    Container(
+                                                      margin:
+                                                          EdgeInsets.all(10),
+                                                      child: Text(
+                                                          "JOHN DRAMANI",
+                                                          style: TextStyle(
+                                                              fontSize: 35.00,
+                                                              color: Color(
+                                                                  0xFFF2F2F2))),
+                                                    ),
+                                                    SizedBox(
+                                                        height:
+                                                            size.height * 0.06),
+                                                    //Divider(),
+                                                    Text(
+                                                        finalResult["data"][1]
+                                                                    ["percent"]
+                                                                .toString() +
+                                                            " %",
+                                                        style: TextStyle(
+                                                            fontSize: 50.00,
+                                                            color: Color(
+                                                                0xFFF1F1F1))),
+
+                                                    SizedBox(
+                                                        height:
+                                                            size.height * 0.06),
+                                                    //Divider(),
+                                                    Text(
+                                                      finalResult["data"][1]
+                                                              ["sum"]
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        color: Colors.grey[50],
+                                                        fontSize: 30.00,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ) //AssetImage('assets/images/ec-pinksheet.jpg'),
+                                          ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.1),
+                                  Container(
+                                    child: Text("Others".toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.blue[900])),
+                                  ),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("GUM",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][2]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][2]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("CPP",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][3]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][3]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("GFP-0.12%",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][4]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][4]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("GCPP",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][5]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][5]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("APC",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][6]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][6]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("LPG",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][7]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][7]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("PNC",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][8]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][8]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("PPP",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][9]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][9]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("NDP",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][10]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][10]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  Divider(),
+                                  SizedBox(height: size.height * 0.05),
+                                  Row(children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text("INDP",
+                                            style: TextStyle(
+                                              fontSize: 40,
+                                            )),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          finalResult["data"][11]["sum"]
+                                                  .toString() +
+                                              " - [ " +
+                                              finalResult["data"][11]["percent"]
+                                                  .toString() +
+                                              " %]",
+                                          style: TextStyle(
+                                            fontSize: 40,
+                                          ),
+                                          textAlign: TextAlign.right,
+                                        ),
+                                      ),
+                                    ),
+                                  ]),
+                                  SizedBox(height: size.height * 0.1),
+                                  Container(
+                                      child: FlatButton(
+                                          child: Text("END SESSION"),
+                                          onPressed: () {
+                                            toast("Session Ended");
+                                            setState(() {
+                                              screenDecider = null;
+                                            });
+                                          }))
+                                ]),
+                          ),
               ))
             : (screenDecider == "engine")
                 ? Container(
@@ -311,7 +891,7 @@ class LoginState extends State<Body> {
 
                                   if (index == 2) {
                                     setState(() {
-                                      //allPendings = null;
+                                      allPendings = null;
                                     });
                                     _loadPendings();
                                   }
@@ -337,21 +917,8 @@ class LoginState extends State<Body> {
                                                   i++)
                                                 GestureDetector(
                                                   onTap: () {
-                                                    String id = allNew["data"]
-                                                                    [i]
-                                                                ["attributes"]
-                                                            ["recent_result"]
-                                                        .toString();
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) {
-                                                          return AdminViewDetails(
-                                                              id: id //allStations["data"][i]["attributes"]["name"]
-                                                              );
-                                                        },
-                                                      ),
-                                                    );
+                                                    _engineViewDetailPage(
+                                                        allNew["data"][i]);
                                                   },
                                                   child: ListTile(
                                                     leading: Text(allNew["data"]
@@ -397,7 +964,10 @@ class LoginState extends State<Body> {
                                             child: CircularProgressIndicator()))
                                     : Container(
                                         child: (allApproved["data"].length < 1)
-                                            ? Container()
+                                            ? Container(
+                                                child: Center(
+                                                    child: Text(
+                                                        "No result approved")))
                                             : ListView(
                                                 children: [
                                                   for (var i = 0;
@@ -407,36 +977,23 @@ class LoginState extends State<Body> {
                                                       i++)
                                                     GestureDetector(
                                                       onTap: () {
-                                                        //print("Hello");
-
-                                                        String id = allApproved[
-                                                                        "data"][i]
-                                                                    [
-                                                                    "attributes"]
-                                                                [
-                                                                "recent_result"]
-                                                            .toString();
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                            builder: (context) {
-                                                              return AdminViewDetails(
-                                                                  id: id //allStations["data"][i]["attributes"]["name"]
-                                                                  );
-                                                            },
-                                                          ),
-                                                        );
+                                                        _engineViewDetailPage(
+                                                            allApproved["data"]
+                                                                [i]);
                                                       },
                                                       child: ListTile(
                                                         leading: Text(
                                                             allApproved["data"]
-                                                                        [i][
-                                                                    "attributes"]
-                                                                ["code"]),
+                                                                            [i][
+                                                                        "attributes"]
+                                                                    ["code"]
+                                                                .toString()),
                                                         title: Text(allApproved[
-                                                                    "data"][i]
-                                                                ["attributes"]
-                                                            ["name"]),
+                                                                        "data"][i]
+                                                                    [
+                                                                    "attributes"]
+                                                                ["name"]
+                                                            .toString()),
                                                         subtitle: Text(
                                                             "NPP:" +
                                                                 allApproved["data"][i]["attributes"]
