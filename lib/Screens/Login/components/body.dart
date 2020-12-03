@@ -11,6 +11,7 @@ import 'package:flutter_auth/components/rounded_password_field.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 //import 'package:intl/intl.dart';
 import 'package:flutter_auth/Screens/TVRoomScreen.dart';
 
@@ -117,7 +118,6 @@ class LoginState extends State<Body> {
   }
 
   void _loadAllApproved() async {
-  
     String feedback = await MyFunctions.getAllApproved();
 
     setState(() {
@@ -134,11 +134,11 @@ class LoginState extends State<Body> {
   }
 
   _engineViewDetailPage(data) {
-     //print(data);
+    //print(data);
     //return;
     String id = data["attributes"]["recent_result"].toString();
     //print(id);
-   //return;
+    //return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -281,14 +281,16 @@ class LoginState extends State<Body> {
             )),
           )
         : (screenDecider == "display")
-        ? Container(
-        child: Container(
-            color: Colors.black54,
-            child: (finalResult == null)
-                ? Center(
-                child: Container(child: CircularProgressIndicator()))
-                : TVRoomScreen(data: finalResult,)
-        ))
+            ? Container(
+                child: Container(
+                    color: Colors.black54,
+                    child: (finalResult == null)
+                        ? Center(
+                            child:
+                                Container(child: CircularProgressIndicator()))
+                        : TVRoomScreen(
+                            data: finalResult,
+                          )))
             : (screenDecider == "engine")
                 ? Container(
                     child: DefaultTabController(

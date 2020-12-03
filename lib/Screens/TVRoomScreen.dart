@@ -57,7 +57,7 @@ class TVRoomState extends State<TVRoomScreen> {
 
   Column _buildMidRowColumn() {
     DateTime now = DateTime.now().toUtc();
-    String formattedDate = DateFormat('EEE d MMM').format(now);
+    String formattedDate = DateFormat('EEEE d MMM yyyy').format(now);
     String formattedTime = DateFormat.jm().format(now);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -185,11 +185,11 @@ class TVRoomState extends State<TVRoomScreen> {
                   ),
                   Container(
                     margin: EdgeInsets.only(right: 50),
-                    child: Text('$perc',
+                    child: Text('$perc%',
                         style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                                 color: Colors.black,
-                                fontSize: 30.0.sp,
+                                fontSize: 28.0.sp,
                                 fontWeight: FontWeight.w700))),
                   )
                 ],
@@ -261,7 +261,7 @@ class TVRoomState extends State<TVRoomScreen> {
                         style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                                 color: Colors.black,
-                                fontSize: 30.0.sp,
+                                fontSize: 28.0.sp,
                                 fontWeight: FontWeight.w700))),
                   )
                 ],
