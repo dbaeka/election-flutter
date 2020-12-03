@@ -1,412 +1,356 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Screens/CustomProgressBar.dart';
+import 'package:sizer/sizer.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class TVRoomScreen extends StatefulWidget {
   // receive data from the FirstScreen as a parameter
-  TVRoomScreen() : super();
+  final Map data;
+
+  TVRoomScreen({Key key, this.data}) : super(key: key);
 
   @override
   TVRoomState createState() => TVRoomState();
 }
 
 class TVRoomState extends State<TVRoomScreen> {
-   String id;
+  Map results = Map();
+
+  Column _buildBottomRowColumn(
+      int initval, String topLabel, String bottomLabel) {
+    List results = widget.data["data"];
+    String sum1 = "0", sum2 = "0";
+    String perc1 = "0.0", perc2 = "0.0";
+    if (results.length != 0) {
+      sum1 = results[initval]["sum"];
+      sum2 = results[initval + 1]["sum"];
+      if (initval + 1 < results.length) {
+        perc1 = results[initval]["percent"];
+        perc2 = results[initval + 1]["percent"];
+      }
+    }
+    TextStyle style = TextStyle(
+        fontSize: 15,
+        fontFamily: 'Gotham',
+        fontWeight: FontWeight.w700,
+        color: Colors.black);
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(bottom: 8),
+          child: Text(topLabel + " - $sum1($perc1%)", style: style),
+        ),
+        // if (bottomLabel.isNotEmpty)
+        Text(
+            bottomLabel +
+                ((initval + 1 < results.length) ? " - $sum2($perc2%)" : ''),
+            style: style)
+      ],
+    );
+  }
+
+  Column _buildMidRowColumn() {
+    DateTime now = DateTime.now().toUtc();
+    String formattedDate = DateFormat('EEE d MMM').format(now);
+    String formattedTime = DateFormat.jm().format(now);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 40.0.w,
+          child: Image.asset(
+            'assets/images/e_results.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 7.0.h, bottom: 7.0.h),
+          width: 40.0.w,
+          child: Image.asset(
+            'assets/images/ghdecideslogo.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Container(
+          height: 8.5.h,
+          width: 36.0.w,
+          padding: EdgeInsets.only(top: 5, left: 8, right: 8),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.black, width: 1.0),
+            borderRadius: BorderRadius.all(
+                Radius.circular(24.0) //         <--- border radius here
+                ),
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(bottom: 3),
+                child: Text('LAST UPDATE',
+                    style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: 8.0.sp,
+                            fontWeight: FontWeight.w400))),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 4),
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(formattedDate,
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 8.0.sp,
+                              fontWeight: FontWeight.w400))),
+                ),
+              ),
+              FittedBox(
+                fit: BoxFit.contain,
+                child: Text(formattedTime,
+                    style: GoogleFonts.montserrat(
+                        textStyle: TextStyle(
+                            color: Color.fromARGB(255, 234, 2, 1),
+                            fontSize: 10.0.sp,
+                            fontWeight: FontWeight.w400))),
+              )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Column _buildLeftSideRowColumn() {
+    List results = widget.data["data"];
+    String perc = "0.0";
+    if (results.length != 0) {
+      perc = results[0]["percent"];
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: Image.asset(
+            'assets/images/nana_top.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Container(
+            alignment: Alignment.bottomRight,
+            margin: EdgeInsets.only(left: 95, top: 7),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('Nana Addo',
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 9.0.sp,
+                              fontWeight: FontWeight.w200))),
+                  Text('Dankwa Akufo-Addo',
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 9.0.sp,
+                              fontWeight: FontWeight.w500))),
+                  Container(
+                    margin: EdgeInsets.only(top: 6),
+                    child: Text('Flag-bearer for the',
+                        style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 8.0.sp,
+                                fontWeight: FontWeight.w200))),
+                  ),
+                  Text('NEW PATRIOTIC PARTY',
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 7.5.sp,
+                              fontWeight: FontWeight.w400))),
+                  Container(
+                    margin: EdgeInsets.only(top: 6, bottom: 2),
+                    child: Image.asset(
+                      'assets/images/rectangle.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(right: 50),
+                    child: Text('$perc',
+                        style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30.0.sp,
+                                fontWeight: FontWeight.w700))),
+                  )
+                ],
+              ),
+            )),
+      ],
+    );
+  }
+
+  Column _buildRightSideRowColumn() {
+    List results = widget.data["data"];
+    String perc = "0.0";
+    if (results.length != 0) {
+      perc = results[1]["percent"];
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          child: Image.asset(
+            'assets/images/mahama_top.png',
+            fit: BoxFit.contain,
+          ),
+        ),
+        Container(
+            alignment: Alignment.bottomRight,
+            margin: EdgeInsets.only(right: 110, top: 7),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text('John Dramani',
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 9.0.sp,
+                              fontWeight: FontWeight.w200))),
+                  Text('Mahama',
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 9.0.sp,
+                              fontWeight: FontWeight.w500))),
+                  Container(
+                    margin: EdgeInsets.only(top: 6),
+                    child: Text('Flag-bearer for the',
+                        style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 8.0.sp,
+                                fontWeight: FontWeight.w200))),
+                  ),
+                  Text('NEW DEMOCRATIC PARTY',
+                      style: GoogleFonts.montserrat(
+                          textStyle: TextStyle(
+                              color: Colors.black,
+                              fontSize: 7.5.sp,
+                              fontWeight: FontWeight.w400))),
+                  Container(
+                    margin: EdgeInsets.only(top: 6, bottom: 2),
+                    child: Image.asset(
+                      'assets/images/rectangle_r.png',
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 0),
+                    child: Text('$perc%',
+                        style: GoogleFonts.montserrat(
+                            textStyle: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30.0.sp,
+                                fontWeight: FontWeight.w700))),
+                  )
+                ],
+              ),
+            )),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return Scaffold(
-        resizeToAvoidBottomPadding: false,
-        appBar: AppBar(title: Text('GhanaDecides\'20')),
-        body: Container(
-            margin: EdgeInsets.all(10),
-            color: Colors.white,
-            child: Builder(
-              builder: (context) => SingleChildScrollView(
-                  child: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(new FocusNode());
-                },
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    Size size = queryData.size;
+    List results = widget.data["data"];
+    String perc1 = "0.0";
+    String perc2 = "0.0";
+    String sum1 = "0";
+    String sum2 = "0";
+    if (results.length != 0) {
+      perc1 = results[0]["percent"];
+      perc2 = results[1]["percent"];
+      sum1 = results[0]["sum"];
+      sum2 = results[1]["sum"];
+    }
+    return Container(
+        color: Colors.white,
+        child: Column(
+          children: <Widget>[
+            Expanded(
                 child: Container(
-                    margin: EdgeInsets.all(10),
-                    color: Colors.white,
-                    child: Column(children: <Widget>[
-                      Container(
-                        //margin: EdgeInsets.all(30),
-                        child: Center(
-                          child:  Container(
-                                width: size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.grey[200],
-                                ),
-                                child: Image.asset(
-                                  'assets/images/gh-decides.png', 
-                                  fit: BoxFit.contain,
-                                ) //AssetImage('assets/images/ec-pinksheet.jpg'),
-                                ),
-                        ),
-                      ),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                width: size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.grey[200],
-                                ),
-                                child: Image.asset(
-                                  'assets/images/npp.png',
-                                  fit: BoxFit.contain,
-                                ) //AssetImage('assets/images/ec-pinksheet.jpg'),
-                                ),
-                                Text("NPP - 35.00%",
-                                    style: TextStyle(
-                                      fontSize: 35.00,
-                                      color: Color(0xFF000089)
-                                    )),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                width: size.width * 0.45,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: Colors.grey[200],
-                                ),
-                                child: Image.asset(
-                                  'assets/images/ndc.png', 
-                                  fit: BoxFit.contain,
-                                ) //AssetImage('assets/images/ec-pinksheet.jpg'),
-                                ),
-                                Text(
-                                  "NDC 35.00%",
-                                  style: TextStyle(
-                                    fontSize: 40,
-                                    color: Color(0xff00380d)
-                                  ),
-                                  textAlign: TextAlign.right,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Container(
-                        child: Text("The Numbers",
-                            style: TextStyle(
-                              fontSize: 20,
-                            )),
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(right:10),
-                            //width: size.width * 0.45,
-                            height: size.width * 0.25,
-                            decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                              color: Colors.grey[200],
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage('assets/images/nana2.png')
-                              )   
-                            ),
-                            child: Container(
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom:5,right: 5),
-                                  child: Text("4,345,981", style: TextStyle(
-                                    color: Colors.grey[50],
-                                    fontSize: 30.00,
-                                  ),
-                                  ),
-                                ),
-                              ),
-                            ) //AssetImage('assets/images/ec-pinksheet.jpg'),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            margin: EdgeInsets.only(right:10),
-                            //width: size.width * 0.45,
-                            height: size.width * 0.25,
-                            decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(30),
-                              color: Colors.grey[200],
-                              image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: AssetImage('assets/images/jm2.png')
-                              )   
-                            ),
-                            child: Container(
-                              child: Align(
-                                alignment: Alignment.bottomRight,
-                                child: Container(
-                                  margin: EdgeInsets.only(bottom:5,right: 5),
-                                  child: Text("4,345,981", style: TextStyle(
-                                    color: Colors.grey[50],
-                                    fontSize: 30.00,
-                                  ),),
-                                ),
-                              ),
-                            ) //AssetImage('assets/images/ec-pinksheet.jpg'),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Container(
-                        child: Text("Others",
-                            style: TextStyle(
-                              fontSize: 20,
-                            )),
-                      ),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("GUM",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "45-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("CPP",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "98-0.13%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("GFP-0.12%",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "78-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("GCPP",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "96-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("APC",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "1-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("LPG",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "23-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("PNC",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "54-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("PPP",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "0-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("NDP",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "96-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      Divider(),
-                      SizedBox(height: size.height * 0.05),
-                      Row(children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            child: Text("INDP",
-                                style: TextStyle(
-                                  fontSize: 40,
-                                )),
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              "3-0.12%",
-                              style: TextStyle(
-                                fontSize: 40,
-                              ),
-                              textAlign: TextAlign.right,
-                            ),
-                          ),
-                        ),
-                      ]),
-                      SizedBox(height: size.height * 0.05),
-                     
-                      SizedBox(height: 300),
-                    ])),
-              )),
-            )));
+                    child: Stack(children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  Expanded(child: _buildLeftSideRowColumn()),
+                  Expanded(child: _buildMidRowColumn()),
+                  Expanded(child: _buildRightSideRowColumn()),
+                ],
+              ),
+              Positioned(
+                  top: 19.0.h,
+                  left: 53.0.w,
+                  child: Container(
+                    height: 6.0.h,
+                    child: Image.asset(
+                      'assets/images/npp_logo.png',
+                      fit: BoxFit.contain,
+                    ),
+                  )),
+              Positioned(
+                  top: 19.0.h,
+                  right: 53.0.w,
+                  child: Container(
+                    height: 6.0.h,
+                    child: Image.asset(
+                      'assets/images/ndc_logo.png',
+                      fit: BoxFit.contain,
+                    ),
+                  )),
+              Positioned(
+                  top: 41.0.h,
+                  left: 30.0.w,
+                  child: CustomProgressBar(
+                    width: 620.0,
+                    leftColor: Color.fromARGB(255, 10, 76, 211),
+                    rightColor: Color.fromARGB(255, 32, 175, 52),
+                    leftPercent: perc1,
+                    rightPercent: perc2,
+                    leftSum: sum1,
+                    rightSum: sum2
+                  ))
+            ]))),
+            Container(
+              decoration: BoxDecoration(
+                  border:
+                      Border(top: BorderSide(color: Colors.black, width: 1.0))),
+              height: 9.0.h,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
+                    _buildBottomRowColumn(2, 'GUM', 'CPP'),
+                    _buildBottomRowColumn(4, 'GFP', 'GCPP'),
+                    _buildBottomRowColumn(6, 'APC', 'LPG'),
+                    _buildBottomRowColumn(8, 'PNC', 'PPP'),
+                    _buildBottomRowColumn(10, 'NDP', 'INDPT')
+                  ]),
+            )
+          ],
+        ));
   }
 }
