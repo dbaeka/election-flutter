@@ -22,8 +22,10 @@ class TVRoomState extends State<TVRoomScreen> {
   Column _buildBottomRowColumn(
       int initval, String topLabel, String bottomLabel) {
     List results = widget.data["data"];
-    String sum1 = "0", sum2 = "0";
-    String perc1 = "0.0", perc2 = "0.0";
+    String sum1 = "0";
+    String sum2 = "0";
+    String perc1 = "0.0";
+    String perc2 = "0.0";
     if (results.length != 0) {
       sum1 = results[initval]["sum"];
       sum2 = results[initval + 1]["sum"];
@@ -47,16 +49,12 @@ class TVRoomState extends State<TVRoomScreen> {
           child: Text(topLabel + " - $sum1($perc1%)", style: style),
         ),
         // if (bottomLabel.isNotEmpty)
-        Text(
-            bottomLabel +
-                ((initval + 1 < results.length) ? " - $sum2($perc2%)" : ''),
-            style: style)
+        Text(bottomLabel + " - $sum2($perc2%)", style: style)
       ],
     );
   }
 
-  Column _buildMidRowColumn() {
-    DateTime now = DateTime.now().toUtc();
+  Column _buildMidRowColumn(DateTime now) {
     String formattedDate = DateFormat('EEEE d MMM yyyy').format(now);
     String formattedTime = DateFormat.jm().format(now);
     return Column(
@@ -189,7 +187,7 @@ class TVRoomState extends State<TVRoomScreen> {
                         style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                                 color: Colors.black,
-                                fontSize: 28.0.sp,
+                                fontSize: 26.0.sp,
                                 fontWeight: FontWeight.w700))),
                   )
                 ],
@@ -261,7 +259,7 @@ class TVRoomState extends State<TVRoomScreen> {
                         style: GoogleFonts.montserrat(
                             textStyle: TextStyle(
                                 color: Colors.black,
-                                fontSize: 28.0.sp,
+                                fontSize: 26.0.sp,
                                 fontWeight: FontWeight.w700))),
                   )
                 ],
@@ -271,11 +269,21 @@ class TVRoomState extends State<TVRoomScreen> {
     );
   }
 
+  // DateTime now = DateTime.now().toUtc();
+  //
+  // void updateTime(){
+  //   setState(() {
+  //     now = DateTime.now().toUtc();
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     Size size = queryData.size;
+    DateTime now = DateTime.now().toUtc();
+    // updateTime();
     List results = widget.data["data"];
     String perc1 = "0.0";
     String perc2 = "0.0";
@@ -298,7 +306,7 @@ class TVRoomState extends State<TVRoomScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Expanded(child: _buildLeftSideRowColumn()),
-                  Expanded(child: _buildMidRowColumn()),
+                  Expanded(child: _buildMidRowColumn(now)),
                   Expanded(child: _buildRightSideRowColumn()),
                 ],
               ),
@@ -326,14 +334,13 @@ class TVRoomState extends State<TVRoomScreen> {
                   top: 41.0.h,
                   left: 30.0.w,
                   child: CustomProgressBar(
-                    width: 620.0,
-                    leftColor: Color.fromARGB(255, 10, 76, 211),
-                    rightColor: Color.fromARGB(255, 32, 175, 52),
-                    leftPercent: perc1,
-                    rightPercent: perc2,
-                    leftSum: sum1,
-                    rightSum: sum2
-                  ))
+                      width: 620.0,
+                      leftColor: Color.fromARGB(255, 10, 76, 211),
+                      rightColor: Color.fromARGB(255, 32, 175, 52),
+                      leftPercent: perc1,
+                      rightPercent: perc2,
+                      leftSum: sum1,
+                      rightSum: sum2))
             ]))),
             Container(
               decoration: BoxDecoration(

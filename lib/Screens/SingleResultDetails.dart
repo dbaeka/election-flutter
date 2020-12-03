@@ -551,7 +551,7 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
                                       //Navigator.pop(context);
                                     }),
                               )),
-                              if (!payload["is_approved"])
+                              if (payload["is_approved"]==0)
                                 Expanded(
                                     child: Container(
                                         margin: EdgeInsets.all(10),
