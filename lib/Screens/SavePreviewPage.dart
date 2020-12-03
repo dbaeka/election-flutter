@@ -405,18 +405,27 @@ class SavePreviewState extends State<SavePreview> {
                             child: Row(
                               children: [
                                 Expanded(
-                                  child: IconButton(
+                                  child: FlatButton.icon(
+                                    onPressed: getImageFromCamera, 
+                                    icon: Icon(Icons.camera_alt,color: Colors.blue[700],),
+                                     label: Text("Camera", style: TextStyle(color: Colors.blue[700]),),
+                                     //color: Colors.blue[500],
+                                    ),/*IconButton(
                                       icon: Icon(Icons.camera_alt),
                                       color: Colors.blue[300],
                                       iconSize: 30,
-                                      onPressed: getImageFromCamera),
+                                      onPressed: getImageFromCamera),*/
                                 ),
                                 Expanded(
-                                  child: IconButton(
+                                  child: FlatButton.icon(
+                                    onPressed: getImageFromGallery, 
+                                    icon: Icon(Icons.perm_media,color: Colors.blue[900],),
+                                     label: Text("Gallery",style: TextStyle(color: Colors.blue[900]),)
+                                    ), /*IconButton(
                                       icon: Icon(Icons.perm_media),
                                       color: Colors.blue[300],
                                       iconSize: 30,
-                                      onPressed: getImageFromGallery),
+                                      onPressed: getImageFromGallery),*/
                                 ),
                               ],
                             ),

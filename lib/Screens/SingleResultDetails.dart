@@ -5,6 +5,7 @@ import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
 import 'package:flutter_auth/modals.dart';
 import 'package:sweetalert/sweetalert.dart';
+import 'package:flutter_auth/Screens/EngineEditResult.dart';
 
 class AdminViewDetails extends StatefulWidget {
   final String id;
@@ -34,6 +35,8 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
   void initState() {
     super.initState();
 
+    //print(id);
+    //return;
     _initializeTxtValues();
     _loadNetImage();
   }
@@ -56,7 +59,7 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
     //print(id);
     String feedback = await MyFunctions.getSingleResult(id);
 
-    //print(feedback);
+    print(feedback);
     //return;
 
     Map loadedData = jsonDecode(feedback);
@@ -148,13 +151,14 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
                             child: Container(
                               margin: EdgeInsets.all(30),
                               child: Center(
-                                child:
-                                    Text("STATION ID:  " + payload["stationId"],
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue[900],
-                                          fontSize: 14,
-                                        )),
+                                child: Text(
+                                    "STATION ID:  " +
+                                        payload["stationId"].toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue[900],
+                                      fontSize: 14,
+                                    )),
                               ),
                             ),
                           ),
@@ -448,7 +452,7 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
                                             child: Text(
                                               "STATION REMARK OR COMMENT",
                                             ))),
-                                    Text(payload["remark"],
+                                    Text(payload["remark"].toString(),
                                         style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: Colors.blue[900],
@@ -547,60 +551,80 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
                                       //Navigator.pop(context);
                                     }),
                               )),
-                              if(!payload["is_approved"])
-                               Expanded(
+                              if (!payload["is_approved"])
+                                Expanded(
+                                    child: Container(
+                                        margin: EdgeInsets.all(10),
+                                        child: RoundedButton(
+                                            color: Colors.green[600],
+                                            text: "APPROVE",
+                                            press: () {
+                                              //print("Approve");
+                                              showAlertDialog(
+                                                  BuildContext context) {
+                                                // set up the buttons
+                                                Widget cancelButton =
+                                                    FlatButton(
+                                                  child: Text("Cancel"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                );
+                                                Widget continueButton =
+                                                    FlatButton(
+                                                  child: Text("Continue"),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+
+                                                    _acceptReject(true);
+                                                  },
+                                                );
+
+                                                // set up the AlertDialog
+                                                AlertDialog alert = AlertDialog(
+                                                  title: Text("AlertDialog"),
+                                                  content: Text(
+                                                      "Are you sure you want to approve this result?"),
+                                                  actions: [
+                                                    cancelButton,
+                                                    continueButton,
+                                                  ],
+                                                );
+
+                                                // show the dialog
+                                                showDialog(
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return alert;
+                                                  },
+                                                );
+                                              }
+
+                                              showAlertDialog(context);
+                                            }))),
+                            ],
+                          ),
+                          SizedBox(height: size.height * 0.05),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
                                   child: Container(
-                                      margin: EdgeInsets.all(10),
-                                      child: RoundedButton(
-                                          color: Colors.green[600],
-                                          text: "APPROVE",
-                                          press: () {
-                                            //print("Approve");
-                                            showAlertDialog(
-                                                BuildContext context) {
-                                              // set up the buttons
-                                              Widget cancelButton = FlatButton(
-                                                child: Text("Cancel"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                              );
-                                              Widget continueButton =
-                                                  FlatButton(
-                                                child: Text("Continue"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-
-                                                  _acceptReject(true);
-                                                },
-                                              );
-
-                                              // set up the AlertDialog
-                                              AlertDialog alert = AlertDialog(
-                                                title: Text("AlertDialog"),
-                                                content: Text(
-                                                    "Are you sure you want to approve this result?"),
-                                                actions: [
-                                                  cancelButton,
-                                                  continueButton,
-                                                ],
-                                              );
-
-                                              // show the dialog
-                                              showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return alert;
-                                                },
-                                              );
-                                            }
-
-                                            showAlertDialog(context);
-                                          }
-                                      )
-                                    )
-                                ),
+                                margin: EdgeInsets.all(10),
+                                child: RoundedButton(
+                                    text: "EDIT",
+                                    color: Colors.yellow[800],
+                                    press: () async {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return EngineEditResult(id: id);
+                                          },
+                                        ),
+                                      );
+                                    }),
+                              )),
                             ],
                           ),
                           Row(

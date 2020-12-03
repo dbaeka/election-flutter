@@ -5,16 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyFunctions {
+  //test
   static const api_root = "https://electiongh.herokuapp.com/api/v1";
-  //https://electiongh.herokuapp.com/api/v1/authenticate
-  //static const url = "http://192.168.8.100/rook_web/api/v3/";
-
-  /*static const ROOT = "https://web.myrookery.com/";
-  //static const ROOT = "http://192.168.8.100/rook_web/public/";
-
-  static const logo_url = ROOT + "img/com_avatar/";
-  static const avatar = ROOT + "img/avatar/";
-  static const event_img_url = ROOT + "img/event-images/";*/
+  //new
+  //static const api_root = "https://ghelectionmonitoring.com/api/v1";
 
   static Future<String> loggIn(Map body) async {
     try {
