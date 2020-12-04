@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/SavePreviewPage.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_plain_field.dart';
+import 'package:flutter_auth/controllers/my-functions.dart';
 import 'package:flutter_auth/modals.dart';
 
 String pollingStationId = "";
@@ -58,7 +59,7 @@ class Body extends StatelessWidget {
                       child: Center(
                         child: Column(
                           children: [
-                            Text("POLLING STATION ID",
+                            Text("POLLING STATION CODE",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue[400],
@@ -348,12 +349,19 @@ class Body extends StatelessWidget {
                       child: RoundedButton(
                           color: Colors.green[600],
                           text: "PREVIEW ENTRIES",
-                          press: () {
+                          press: () async {
                             if (pollingStationId == "" ||
                                 pollingStationId == null) {
                               toast("You must enter Polling Station ID");
                               return;
                             }
+
+                             String stationCode = await MyFunctions.getLoggedInData("station_code");
+
+                              if (stationCode != pollingStationId) {
+                                toast("Polling station code does not match the logged in User");
+                                return;
+                              }
 
                             Map payload = {
                               "stationId": pollingStationId,

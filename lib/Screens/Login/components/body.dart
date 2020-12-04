@@ -116,7 +116,6 @@ class LoginState extends State<Body> {
   }
 
   void _loadAllApproved() async {
-  
     String feedback = await MyFunctions.getAllApproved();
 
     setState(() {
@@ -133,11 +132,11 @@ class LoginState extends State<Body> {
   }
 
   _engineViewDetailPage(data) {
-     //print(data);
+    //print(data);
     //return;
     String id = data["attributes"]["recent_result"].toString();
     //print(id);
-   //return;
+    //return;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -216,6 +215,8 @@ class LoginState extends State<Body> {
 
                       feedbackMsg = await MyFunctions.loggIn(post);
 
+                      //print(feedbackMsg);
+
                       Navigator.pop(context);
 
                       if (feedbackMsg == null || feedbackMsg == "") {
@@ -253,14 +254,6 @@ class LoginState extends State<Body> {
                       if (role == "engine") //administrator login
                       {
                         _loadAllNew();
-                        /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) {
-                                  return EngineScreen();
-                                },
-                              ),
-                            );*/
                       }
 
                       if (role == "display") //administrator login
@@ -270,8 +263,6 @@ class LoginState extends State<Body> {
                     } catch (e) {
                       toast("Login failed");
                       print(e.toString());
-                      //Navigator.pop(context);
-                      // return;
                     }
                   },
                 ),

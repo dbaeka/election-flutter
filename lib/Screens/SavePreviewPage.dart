@@ -102,7 +102,7 @@ class SavePreviewState extends State<SavePreview> {
                         child: Container(
                           margin: EdgeInsets.all(30),
                           child: Center(
-                            child: Text("STATION ID:  " + payload["stationId"],
+                            child: Text("STATION CODE:  " + payload["stationId"],
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.blue[900],
@@ -406,11 +406,17 @@ class SavePreviewState extends State<SavePreview> {
                               children: [
                                 Expanded(
                                   child: FlatButton.icon(
-                                    onPressed: getImageFromCamera, 
-                                    icon: Icon(Icons.camera_alt,color: Colors.blue[700],),
-                                     label: Text("Camera", style: TextStyle(color: Colors.blue[700]),),
-                                     //color: Colors.blue[500],
-                                    ),/*IconButton(
+                                    onPressed: getImageFromCamera,
+                                    icon: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.blue[700],
+                                    ),
+                                    label: Text(
+                                      "Camera",
+                                      style: TextStyle(color: Colors.blue[700]),
+                                    ),
+                                    //color: Colors.blue[500],
+                                  ), /*IconButton(
                                       icon: Icon(Icons.camera_alt),
                                       color: Colors.blue[300],
                                       iconSize: 30,
@@ -418,10 +424,16 @@ class SavePreviewState extends State<SavePreview> {
                                 ),
                                 Expanded(
                                   child: FlatButton.icon(
-                                    onPressed: getImageFromGallery, 
-                                    icon: Icon(Icons.perm_media,color: Colors.blue[900],),
-                                     label: Text("Gallery",style: TextStyle(color: Colors.blue[900]),)
-                                    ), /*IconButton(
+                                      onPressed: getImageFromGallery,
+                                      icon: Icon(
+                                        Icons.perm_media,
+                                        color: Colors.blue[900],
+                                      ),
+                                      label: Text(
+                                        "Gallery",
+                                        style:
+                                            TextStyle(color: Colors.blue[900]),
+                                      )), /*IconButton(
                                       icon: Icon(Icons.perm_media),
                                       color: Colors.blue[300],
                                       iconSize: 30,
@@ -522,7 +534,7 @@ class SavePreviewState extends State<SavePreview> {
                                         prefs.setString(
                                             "result", jsonEncode(post));
                                         prefs.setString(
-                                            "pink-sheet", base64Image);
+                                            "pink_sheet", base64Image);
                                         //print(post);
 
                                         if (base64Image == null ||
@@ -530,6 +542,20 @@ class SavePreviewState extends State<SavePreview> {
                                           toast("Add pink sheet");
                                           return;
                                         }
+
+                                        String stationCode =
+                                            await MyFunctions.getLoggedInData(
+                                                "station_code");
+
+                                        if (stationCode !=
+                                            payload["stationId"]) {
+                                          toast(
+                                              "Polling station code does not match the logged in User");
+                                          return;
+                                        }
+                                        //print(stationCode);
+                                        //return;
+
                                         feedbackMsg = "";
                                         try {
                                           showAlertDialog(context, "Saving...");
@@ -578,7 +604,9 @@ class SavePreviewState extends State<SavePreview> {
                                           } else {
                                             SweetAlert.show(context,
                                                 title: "Failed",
-                                                subtitle: "Failed with " + feedbackMsg + " :Retry",
+                                                subtitle: "Failed with " +
+                                                    feedbackMsg +
+                                                    " :Retry",
                                                 style: SweetAlertStyle.error);
                                           }
                                         } catch (e) {

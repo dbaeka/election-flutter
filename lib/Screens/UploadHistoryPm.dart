@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Screens/ViewUploadedResult.dart';
+import 'package:flutter_auth/Screens/ViewUploadedPmResult.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
 
-class UploadHistory extends StatefulWidget {
+class UploadHistoryPm extends StatefulWidget {
   // receive data from the FirstScreen as a parameter
-  UploadHistory({Key key}) : super();
+  UploadHistoryPm({Key key}) : super();
 
   @override
   UploadHistoryState createState() => UploadHistoryState();
 }
 
-class UploadHistoryState extends State<UploadHistory> {
+class UploadHistoryState extends State<UploadHistoryPm> {
   // receive data from the FirstScreen as a parameter
   UploadHistoryState({Key key}) : super();
 
@@ -32,11 +32,11 @@ class UploadHistoryState extends State<UploadHistory> {
   }
 
   _loadHistory() async {
-    String data = await MyFunctions.getUploadHistory();
+    String data = await MyFunctions.getUploadHistoryPm();
 
     List feedback = jsonDecode(data)["data"];
 
-    //print(feedback);
+    //print(data);
 
     setState(() {
       iniData = feedback;
@@ -53,13 +53,16 @@ class UploadHistoryState extends State<UploadHistory> {
         .replaceAll("T", " @ ");
 
     payload["image_url"] = data["attributes"]["recent_image"];
-    payload["id"] = data["id"];
-     //print(payload["image_url"]);
+    //payload["id"] = data["id"];
+    /*print(payload);
+    print("////");
+    print(data);
+    return;*/
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
-          return ViewUploadResult(payload: payload);
+          return ViewUploadedPmResult(payload: payload);
         },
       ),
     );
@@ -69,7 +72,7 @@ class UploadHistoryState extends State<UploadHistory> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: Text('Upload History')),
+      appBar: AppBar(title: Text('Parliamentary Upload History')),
       body: loading == false
           ? Container(
               margin: EdgeInsets.all(10),
@@ -90,13 +93,21 @@ class UploadHistoryState extends State<UploadHistory> {
                           for (var i = 0; i < iniData.length; i++)
                             InkWell(
                               onTap: () {
-                                 _singleItem(iniData[i]);
-                               
+                                _singleItem(iniData[i]);
                               },
                               child: ListTile(
-                                leading: (iniData[i]["attributes"]["is_approved"].toString() == "true") 
-                                ? Icon(Icons.check_box, color: Colors.green,)
-                                : Icon(Icons.pending_actions,color: Colors.yellow[300],),
+                                leading: (iniData[i]["attributes"]
+                                                ["is_approved"]
+                                            .toString() ==
+                                        "true")
+                                    ? Icon(
+                                        Icons.check_box,
+                                        color: Colors.green,
+                                      )
+                                    : Icon(
+                                        Icons.pending_actions,
+                                        color: Colors.yellow[300],
+                                      ),
                                 title: Text(iniData[i]["attributes"]
                                         ["updated_at"]
                                     .toString()

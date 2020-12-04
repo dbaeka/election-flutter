@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Capture/capture_screen.dart';
+import 'package:flutter_auth/Screens/CapturePaliamentary/parliamentary_screen.dart';
 import 'package:flutter_auth/Screens/Dashboard/components/background.dart';
 import 'package:flutter_auth/Screens/UploadHistory.dart';
+import 'package:flutter_auth/Screens/UploadHistoryPm.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/constants.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
@@ -19,6 +21,7 @@ class Body extends StatefulWidget {
 class BodyState extends State<Body> {
   String name = "";
   String stationId = "";
+  String phone = "";
 //class Body extends StatelessWidget {
   @override
   void initState() {
@@ -30,12 +33,13 @@ class BodyState extends State<Body> {
   _loggedInDetails() async {
     String data = await MyFunctions.loggedInDetails();
 
-    print(data);
+    //print(data);
 
     setState(() {
       var row = jsonDecode(data);
       name = row["name"].toString().toUpperCase();
-      stationId = row["station_id"].toString();
+      stationId = row["station_code"].toString();
+      phone = row["phone"].toString();
     });
   }
 
@@ -48,25 +52,35 @@ class BodyState extends State<Body> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Card(
+              child: Container(
+                margin: EdgeInsets.all(30),
+                child: Text(
+                  "GHANA DECIDES'20",
+                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue[700], fontSize: 25),
+                ),
+              ),
+            ),
+            SizedBox(height: size.height * 0.05),
             Text(
-              "GHANA DECIDES'20",
+              "WELCOME  $name",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.05),
             Text(
-              "NAME:$name",
+              "PHONE NUMBER: $phone",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            /*SizedBox(height: size.height * 0.05),
+            SizedBox(height: size.height * 0.05),
             Container(
               child: Text(
-                "STATION ID:$stationId",
+                "POLLING STATION CODE: $stationId",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-            ),*/
+            ),
             SizedBox(height: size.height * 0.05),
             RoundedButton(
-              text: "ADD POLLING STATION RESULT",
+              text: "ADD PRESIDENTIAL RESULT",
               press: () {
                 Navigator.push(
                   context,
@@ -79,7 +93,7 @@ class BodyState extends State<Body> {
               },
             ),
             RoundedButton(
-              text: "VIEW UPLOAD HISTORY",
+              text: "PRESIDENTIAL HISTORY",
               color: kPrimaryLightColor,
               textColor: Colors.black,
               press: () {
@@ -88,6 +102,37 @@ class BodyState extends State<Body> {
                   MaterialPageRoute(
                     builder: (context) {
                       return UploadHistory();
+                    },
+                  ),
+                );
+              },
+            ),
+
+            SizedBox(height: size.height * 0.05),
+            RoundedButton(
+              color: Colors.blue[700],
+              text: "ADD PARLIAMENTARY RESULT",
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return ParliamentaryScreen();
+                    },
+                  ),
+                );
+              },
+            ),
+            RoundedButton(
+              text: "PARLIAMENTARY HISTORY",
+              color: kPrimaryLightColor,
+              textColor: Colors.black,
+              press: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return UploadHistoryPm();
                     },
                   ),
                 );

@@ -6,9 +6,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MyFunctions {
   //test
-  static const api_root = "https://electiongh.herokuapp.com/api/v1";
+  //static const api_root = "https://electiongh.herokuapp.com/api/v1";
   //new
-  //static const api_root = "https://ghelectionmonitoring.com/api/v1";
+  static const api_root = "https://ghelectionmonitoring.com/api/v1";
 
   static Future<String> loggIn(Map body) async {
     try {
@@ -73,6 +73,29 @@ class MyFunctions {
     }
   }
 
+  static Future<String> savePmResults(Map body) async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .post(api_root + "/pm_results", body: jsonEncode(body), headers: headers)
+          .then((http.Response response) {
+        final int statusCode = response.statusCode;
+        //print(statusCode);
+
+        return statusCode.toString();
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }
+
   static Future<String> saveImage(Map body) async {
     try {
       String token = await getToken();
@@ -100,6 +123,33 @@ class MyFunctions {
     }
   }
 
+   static Future<String> savePmImage(Map body) async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .post(api_root + "/pm_images",
+              body: jsonEncode(body), headers: headers)
+          .then((http.Response response) {
+        final int statusCode = response.statusCode;
+
+        String returnVal = (response.body == null) ? "" : response.body;
+
+        print("image2" + returnVal);
+
+        return statusCode.toString();
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }
+
   static Future<String> getUploadHistory() async {
     try {
       String token = await getToken();
@@ -110,6 +160,31 @@ class MyFunctions {
       };
       return http
           .get(api_root + "/upload_history", headers: headers)
+          .then((http.Response response) {
+        //final int statusCode = response.statusCode;
+
+        String returnVal = (response.body == null) ? "" : response.body;
+
+        //print(returnVal);
+
+        return returnVal;
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }
+
+   static Future<String> getUploadHistoryPm() async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .get(api_root + "/pm_upload_history", headers: headers)
           .then((http.Response response) {
         //final int statusCode = response.statusCode;
 
@@ -168,6 +243,12 @@ class MyFunctions {
     return token;
   }
 
+static getLoggedInData(String field) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String info = jsonDecode(prefs.getString("login"))[field];
+    //print(token);
+    return info;
+  }
   static Future<String> getAllResults() async {
     try {
       String token = await getToken();
@@ -367,6 +448,28 @@ class MyFunctions {
           .get(api_root + "/display_results", headers: headers)
           .then((http.Response response) {
         String returnVal = (response.body == null) ? "" : response.body;
+        return returnVal;
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }
+
+  static Future<String> parliamentaryCandidates() async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .get(api_root + "/pm_candidates", headers: headers)
+          .then((http.Response response) {
+
+        String returnVal = (response.body == null) ? "" : response.body;
+
         return returnVal;
       }).catchError((error) =>
               print("Server not reached: Error Msg:" + error.toString()));
