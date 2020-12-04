@@ -87,7 +87,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["1"]}",
+                            child: SelectableText("${payload["1"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -107,7 +107,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["2"]}",
+                            child: SelectableText("${payload["2"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -127,7 +127,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["3"]}",
+                            child: SelectableText("${payload["3"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -147,7 +147,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["4"]}",
+                            child: SelectableText("${payload["4"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -167,7 +167,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["5"]}",
+                            child: SelectableText("${payload["5"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -187,7 +187,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["6"]}",
+                            child: SelectableText("${payload["6"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -207,7 +207,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["7"]}",
+                            child: SelectableText("${payload["7"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -227,7 +227,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["8"]}",
+                            child: SelectableText("${payload["8"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -247,7 +247,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["9"]}",
+                            child: SelectableText("${payload["9"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -267,7 +267,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["10"]}",
+                            child: SelectableText("${payload["10"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -287,7 +287,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                            child: Text("${payload["11"]}",
+                            child: SelectableText("${payload["11"]}",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),
@@ -307,7 +307,7 @@ class ViewUploadResultState extends State<ViewUploadResult> {
                         ),
                         Expanded(
                           child: Container(
-                              child: Text("${payload["12"]}",
+                              child: SelectableText("${payload["12"]}",
                                   style: TextStyle(
                                     fontSize: 40,
                                   ))),
