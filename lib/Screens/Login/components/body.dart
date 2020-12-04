@@ -175,12 +175,12 @@ class LoginState extends State<Body> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: size.height * 0.03),
-                if(size.width < 600) 
+                /*if(size.width < 600) 
                 SvgPicture.asset(
                   "assets/icons/login.svg",
                   height: size.height * 0.35,
                 ),
-                SizedBox(height: size.height * 0.03),
+                SizedBox(height: size.height * 0.03),*/
                 RoundedInputField(
                   hintText: "Phone Number",
                   keyboard: TextInputType.number,
