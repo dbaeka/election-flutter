@@ -368,7 +368,7 @@ class SavePreviewState extends State<SavePreview> {
                       Row(children: <Widget>[
                         Expanded(
                           child: Container(
-                            child: Text("INDP",
+                            child: Text("INDPT",
                                 style: TextStyle(
                                   fontSize: 40,
                                 )),

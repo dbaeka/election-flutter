@@ -1,15 +1,17 @@
 import 'dart:async';
 import 'dart:convert';
+
 //import 'package:flutter_auth/modals.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyFunctions {
   //test
-  //static const api_root = "https://electiongh.herokuapp.com/api/v1";
+  // static const api_root = "https://electiongh.herokuapp.com/api/v1";
   //new
   static const api_root = "https://ghelectionmonitoring.com/api/v1";
 
+  // static const api_root = "https://server.test/api/v1";
   static Future<String> loggIn(Map body) async {
     try {
       //toast("I am here");
@@ -404,12 +406,11 @@ static getLoggedInData(String field) async {
   //acceptReject
 
   static Future<String> acceptReject(Map body) async {
-   
     try {
       String token = await getToken();
-       print(body);
-        print(token);
-        print(api_root + "/results");
+      print(body);
+      print(token);
+      print(api_root + "/results");
 
       Map<String, String> headers = {
         "Content-Type": "application/json",
