@@ -240,7 +240,7 @@ class TVRoomState extends State<TVRoomScreen> {
                                 fontSize: 8.0.sp,
                                 fontWeight: FontWeight.w200))),
                   ),
-                  Text('NATIONAL DEMOCRATIC PARTY',
+                  Text('NATIONAL DEMOCRATIC CONGRESS',
                       style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: Colors.black,
