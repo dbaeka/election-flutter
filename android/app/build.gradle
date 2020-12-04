@@ -69,6 +69,10 @@ android {
             //when you want to release, uncomment this and comment next
             //signingConfig signingConfigs.release
 
+            signingConfig signingConfigs.release
+        }
+
+        debug {
             signingConfig signingConfigs.debug
         }
     }
