@@ -10,6 +10,7 @@ import 'dart:convert';
 import '../modals.dart';
 import 'package:sweetalert/sweetalert.dart';
 import 'package:path/path.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ParliamentaryPreview extends StatefulWidget {
   final Map payload;
@@ -33,6 +34,7 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
   List candidates = [];
   Map results = {};
   Map onlyResults = {};
+
   //TextEditingController _msgController = new TextEditingController();
 
   // receive data from the FirstScreen as a parameter
@@ -55,6 +57,7 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
   }
 
   String albumName = 'Media';
+
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
@@ -68,8 +71,10 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
         print('No image selected.');
       }
     });
-
-    GallerySaver.saveImage(_image.path, albumName: albumName);
+    if (pickedFile != null && await Permission.storage.request().isGranted) {
+      // Either the permission was already granted before or the user just granted it.
+      GallerySaver.saveImage(_image.path, albumName: albumName);
+    }
     //toast(wait.toString());
   }
 

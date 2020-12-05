@@ -10,6 +10,7 @@ import '../modals.dart';
 import 'package:sweetalert/sweetalert.dart';
 import 'package:path/path.dart';
 import 'package:gallery_saver/gallery_saver.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SavePreview extends StatefulWidget {
   final Map payload;
@@ -54,7 +55,10 @@ class SavePreviewState extends State<SavePreview> {
       }
     });
 
-    GallerySaver.saveImage(_image.path, albumName: albumName);
+    if (pickedFile != null && await Permission.storage.request().isGranted) {
+      // Either the permission was already granted before or the user just granted it.
+      GallerySaver.saveImage(_image.path, albumName: albumName);
+    }
     //toast(result.toString());
   }
 
