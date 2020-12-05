@@ -44,6 +44,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+publish_to: none
 
 flutter_icons:
   android: true
