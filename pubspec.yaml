@@ -1,6 +1,6 @@
 name: flutter_auth
 description: Ghana Decides 2020.
-
+publish_to: none
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
 # followed by an optional build number separated by a +.
@@ -43,7 +43,6 @@ dev_dependencies:
   flutter_launcher_icons: ^0.8.1
   flutter_test:
     sdk: flutter
-
 
 flutter_icons:
   android: true
