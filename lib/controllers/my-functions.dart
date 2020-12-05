@@ -113,9 +113,9 @@ class MyFunctions {
           .then((http.Response response) {
         final int statusCode = response.statusCode;
 
-        String returnVal = (response.body == null) ? "" : response.body;
+        //String returnVal = (response.body == null) ? "" : response.body;
 
-        print("image2" + returnVal);
+        //print("image2" + returnVal);
 
         return statusCode.toString();
       }).catchError((error) =>
@@ -140,9 +140,9 @@ class MyFunctions {
           .then((http.Response response) {
         final int statusCode = response.statusCode;
 
-        String returnVal = (response.body == null) ? "" : response.body;
+        //String returnVal = (response.body == null) ? "" : response.body;
 
-        print("image2" + returnVal);
+        //print("image2" + returnVal);
 
         return statusCode.toString();
       }).catchError((error) =>

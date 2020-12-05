@@ -39,6 +39,12 @@ class BodyState extends State<Body> {
     setState(() {
       candidates = jsonDecode(data)["data"];
     });
+
+    for(var i = 0; i < candidates.length; i++)
+    {
+       String candidateId = candidates[i]["id"].toString();
+      result[candidateId] = "0";
+    }
   }
 
   @override

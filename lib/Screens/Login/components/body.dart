@@ -59,7 +59,7 @@ class LoginState extends State<Body> {
 
   void fcmNotification() async {
     _fcm.getToken().then((token) {
-      print(token);
+      //print(token);
 
       setState(() {
         fcmToken = token;

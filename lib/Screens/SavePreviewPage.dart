@@ -40,8 +40,6 @@ class SavePreviewState extends State<SavePreview> {
 
   SizedBox divider = SizedBox(height: 20);
 
-  String albumName = 'Media';
-
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
 
@@ -55,9 +53,13 @@ class SavePreviewState extends State<SavePreview> {
       }
     });
 
-    if (pickedFile != null && await Permission.storage.request().isGranted) {
-      // Either the permission was already granted before or the user just granted it.
-      GallerySaver.saveImage(_image.path, albumName: albumName);
+    try {
+      if (pickedFile != null && await Permission.storage.request().isGranted) {
+        // Either the permission was already granted before or the user just granted it.
+        GallerySaver.saveImage(_image.path);
+      }
+    } catch (e) {
+      toast("Take picture again " + e.toString());
     }
     //toast(result.toString());
   }
