@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
@@ -53,6 +54,7 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
     });
   }
 
+  String albumName = 'Media';
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
@@ -60,12 +62,15 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
         _image = File(pickedFile.path);
         base64Image = base64Encode(_image.readAsBytesSync());
         filename = basename(_image.path);
-        print(filename);
+        //print(filename);
         //print("base64Image:::" + base64Image);
       } else {
         print('No image selected.');
       }
     });
+
+    GallerySaver.saveImage(_image.path, albumName: albumName);
+    //toast(wait.toString());
   }
 
   Future getImageFromGallery() async {
@@ -150,9 +155,14 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
                                           )),
                                     ),
                                     Text(
-                                        (onlyResults[candidates[i]["id"].toString()].toString() == "null")
+                                        (onlyResults[candidates[i]["id"]
+                                                        .toString()]
+                                                    .toString() ==
+                                                "null")
                                             ? "0"
-                                            : onlyResults[candidates[i]["id"].toString()].toString(),
+                                            : onlyResults[candidates[i]["id"]
+                                                    .toString()]
+                                                .toString(),
                                         style: TextStyle(
                                             fontSize: 40,
                                             fontWeight: FontWeight.bold,

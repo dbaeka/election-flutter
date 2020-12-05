@@ -9,6 +9,7 @@ import 'dart:convert';
 import '../modals.dart';
 import 'package:sweetalert/sweetalert.dart';
 import 'package:path/path.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class SavePreview extends StatefulWidget {
   final Map payload;
@@ -38,19 +39,23 @@ class SavePreviewState extends State<SavePreview> {
 
   SizedBox divider = SizedBox(height: 20);
 
+  String albumName = 'Media';
+
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
+
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
         base64Image = base64Encode(_image.readAsBytesSync());
         filename = basename(_image.path);
-        print(filename);
-        //print("base64Image:::" + base64Image);
       } else {
         print('No image selected.');
       }
     });
+
+    GallerySaver.saveImage(_image.path, albumName: albumName);
+    //toast(result.toString());
   }
 
   Future getImageFromGallery() async {
@@ -60,8 +65,6 @@ class SavePreviewState extends State<SavePreview> {
         _image = File(pickedFile.path);
         base64Image = base64Encode(_image.readAsBytesSync());
         filename = basename(_image.path);
-        //print(filename);
-        //print("base64Image:::" + base64Image);
       } else {
         print('No image selected.');
       }
@@ -102,12 +105,13 @@ class SavePreviewState extends State<SavePreview> {
                         child: Container(
                           margin: EdgeInsets.all(30),
                           child: Center(
-                            child: Text("STATION CODE:  " + payload["stationId"],
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.blue[900],
-                                  fontSize: 14,
-                                )),
+                            child:
+                                Text("STATION CODE:  " + payload["stationId"],
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.blue[900],
+                                      fontSize: 14,
+                                    )),
                           ),
                         ),
                       ),
