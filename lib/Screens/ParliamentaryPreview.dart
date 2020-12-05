@@ -56,8 +56,6 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
     });
   }
 
-  String albumName = 'Media';
-
   Future getImageFromCamera() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
     setState(() {
@@ -71,9 +69,13 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
         print('No image selected.');
       }
     });
-    if (pickedFile != null && await Permission.storage.request().isGranted) {
-      // Either the permission was already granted before or the user just granted it.
-      GallerySaver.saveImage(_image.path, albumName: albumName);
+    try {
+      if (pickedFile != null && await Permission.storage.request().isGranted) {
+        // Either the permission was already granted before or the user just granted it.
+        GallerySaver.saveImage(_image.path);
+      }
+    } catch (e) {
+      toast("Take picture again " + e.toString());
     }
     //toast(wait.toString());
   }
@@ -359,7 +361,7 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
                                                 await MyFunctions.savePmImage(
                                                     post);
 
-                                            print("image  " + feedbackMsg);
+                                            //print("image  " + feedbackMsg);
 
                                             Navigator.pop(context);
 
@@ -381,7 +383,7 @@ class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
                                           } else {
                                             SweetAlert.show(context,
                                                 title: "Failed",
-                                                subtitle: "Failed with " +
+                                                subtitle: "Data failed with " +
                                                     feedbackMsg +
                                                     " :Retry",
                                                 style: SweetAlertStyle.error);
