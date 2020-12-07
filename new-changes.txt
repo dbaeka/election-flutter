@@ -1,0 +1,6 @@
+/stations/media
+
+/pm_results/new
+/pm_results/old
+/pm_results/pending
+/pm_results/media

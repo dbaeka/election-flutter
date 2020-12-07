@@ -45,6 +45,7 @@ class LoginState extends State<Body> {
   Map allPendings;
   Map allResults;
   Map allNew;
+  Map allMedia;
 
 /*engine room variables end here*/
 
@@ -77,7 +78,7 @@ class LoginState extends State<Body> {
 
       if (screenDecider == "display") _finalResult();
 
-      toast("New result in");
+      if (screenDecider != "polling") toast("New result in");
     }, onResume: (Map<String, dynamic> message) async {
       //print("Message on Resume: $message");
 
@@ -86,7 +87,7 @@ class LoginState extends State<Body> {
 
       if (screenDecider == "display") _finalResult();
 
-      toast("New result in");
+      if (screenDecider != "polling") toast("New result in");
     }, onLaunch: (Map<String, dynamic> message) async {
       //print("Message on Launch: $message");
       //load new result from polling stations
@@ -94,7 +95,7 @@ class LoginState extends State<Body> {
 
       if (screenDecider == "display") _finalResult();
 
-      toast("New result in");
+      if (screenDecider != "polling") toast("New result in");
     });
   }
 
@@ -110,6 +111,16 @@ class LoginState extends State<Body> {
   void _loadAllNew() async {
     String feedback = await MyFunctions.getAllNew();
 
+    //print(feedback);
+
+    if (feedback.contains("Invalid Argument Exception")) {
+      setState(() {
+        allNew = jsonDecode('{"data":[]}');
+      });
+
+      return;
+    }
+
     setState(() {
       allNew = jsonDecode(feedback);
       //print("Function laoded" + allNew["data"].length);
@@ -119,8 +130,20 @@ class LoginState extends State<Body> {
   void _loadAllApproved() async {
     String feedback = await MyFunctions.getAllApproved();
 
+    //print(feedback);
+
     setState(() {
       allApproved = jsonDecode(feedback);
+    });
+  }
+
+  void _loadAllMedia() async {
+    String feedback = await MyFunctions.getAllMedia();
+    //toast("Hello");
+    //print(feedback);
+    setState(() {
+      allMedia = jsonDecode(feedback);
+      //print(allMedia[0]["links"]);
     });
   }
 
@@ -135,7 +158,8 @@ class LoginState extends State<Body> {
   _engineViewDetailPage(data) {
     //print(data);
     //return;
-    String id = data["attributes"]["recent_result"].toString();
+    //return;
+    String id = data["id"].toString();
     //print(id);
     //return;
     Navigator.push(
@@ -149,6 +173,21 @@ class LoginState extends State<Body> {
       ),
     );
   }
+
+  Map searchedData;
+  void _searchResultField(String text) async {
+    toast("Searching " + text + "...");
+
+    String data = await MyFunctions.searchResult(text);
+
+    //print(data);
+
+    setState(() {
+      searchedData = jsonDecode(data);
+    });
+  }
+
+  TextEditingController _searchResult = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -174,12 +213,6 @@ class LoginState extends State<Body> {
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: size.height * 0.03),
-                /*if(size.width < 600) 
-                SvgPicture.asset(
-                  "assets/icons/login.svg",
-                  height: size.height * 0.35,
-                ),
-                SizedBox(height: size.height * 0.03),*/
                 RoundedInputField(
                   hintText: "Phone Number",
                   keyboard: TextInputType.number,
@@ -255,13 +288,11 @@ class LoginState extends State<Body> {
                           ),
                         );
 
-                      if (role == "engine") //administrator login
-                      {
+                      if (role == "engine") {
                         _loadAllNew();
                       }
 
-                      if (role == "display") //administrator login
-                      {
+                      if (role == "display") {
                         _finalResult();
                       }
                     } catch (e) {
@@ -288,20 +319,24 @@ class LoginState extends State<Body> {
             : (screenDecider == "engine")
                 ? Container(
                     child: DefaultTabController(
-                      length: 3,
+                      length: 5,
                       child: Scaffold(
                         appBar: AppBar(
                           bottom: TabBar(
                               tabs: [
                                 Tab(
-                                    icon: Icon(Icons.person_outlined),
+                                    icon: Icon(Icons.record_voice_over),
                                     text: 'NEW'),
                                 Tab(
                                     icon: Icon(Icons.pending_actions),
                                     text: 'APPROVED'),
                                 Tab(
+                                    icon: Icon(Icons.missed_video_call),
+                                    text: 'MEDIA'),
+                                Tab(
                                     icon: Icon(Icons.pending_actions),
                                     text: 'PENDING'),
+                                Tab(icon: Icon(Icons.search), text: 'SEARCH'),
                               ],
                               onTap: (index) async {
                                 try {
@@ -323,6 +358,14 @@ class LoginState extends State<Body> {
 
                                   if (index == 2) {
                                     setState(() {
+                                      allMedia = null;
+                                    });
+
+                                    _loadAllMedia();
+                                  }
+
+                                  if (index == 3) {
+                                    setState(() {
                                       allPendings = null;
                                     });
                                     _loadPendings();
@@ -332,7 +375,7 @@ class LoginState extends State<Body> {
                               }),
                           title: Row(
                             children: [
-                              Expanded(child: Text('Engine Room')),
+                              Expanded(child: Text('Presidential Engine Room')),
                               FlatButton(
                                 child: Text("LogOut",
                                     style: TextStyle(color: Colors.white60)),
@@ -367,11 +410,15 @@ class LoginState extends State<Body> {
                                                   },
                                                   child: ListTile(
                                                     leading: Text(allNew["data"]
-                                                            [i]["attributes"]
-                                                        ["code"]),
+                                                                    [i]
+                                                                ["attributes"]
+                                                            ["station_code"]
+                                                        .toString()),
                                                     title: Text(allNew["data"]
-                                                            [i]["attributes"]
-                                                        ["name"]),
+                                                                    [i]
+                                                                ["attributes"]
+                                                            ["station_name"]
+                                                        .toString()),
                                                     subtitle: Text(
                                                         "NPP:" +
                                                             allNew["data"][i]
@@ -427,17 +474,17 @@ class LoginState extends State<Body> {
                                                                 [i]);
                                                       },
                                                       child: ListTile(
-                                                        leading: Text(
-                                                            allApproved["data"]
-                                                                            [i][
-                                                                        "attributes"]
-                                                                    ["code"]
-                                                                .toString()),
+                                                        leading: Text(allApproved[
+                                                                        "data"][i]
+                                                                    [
+                                                                    "attributes"]
+                                                                ["station_code"]
+                                                            .toString()),
                                                         title: Text(allApproved[
                                                                         "data"][i]
                                                                     [
                                                                     "attributes"]
-                                                                ["name"]
+                                                                ["station_name"]
                                                             .toString()),
                                                         subtitle: Text(
                                                             "NPP:" +
@@ -452,6 +499,73 @@ class LoginState extends State<Body> {
                                                                     .toString() +
                                                                 ", Others: " +
                                                                 allApproved["data"][i]
+                                                                            [
+                                                                            "attributes"]["records"]
+                                                                        ["3"]
+                                                                    .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12)),
+                                                        trailing: Text("view",
+                                                            style: TextStyle(
+                                                                color:
+                                                                    Colors.grey[
+                                                                        500])),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
+                                      )),
+                            Container(
+                                child: (allMedia == null)
+                                    ? Container(
+                                        margin: EdgeInsets.all(30),
+                                        child: Center(
+                                            child: CircularProgressIndicator()))
+                                    : Container(
+                                        child: (allMedia["data"].length < 1)
+                                            ? Container(
+                                                child: Center(
+                                                    child: Text(
+                                                        "No result pushed to media")))
+                                            : ListView(
+                                                children: [
+                                                  for (var i = 0;
+                                                      i <
+                                                          allMedia["data"]
+                                                              .length;
+                                                      i++)
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        _engineViewDetailPage(
+                                                            allMedia["data"]
+                                                                [i]);
+                                                      },
+                                                      child: ListTile(
+                                                        leading: Text(allMedia[
+                                                                        "data"][i]
+                                                                    [
+                                                                    "attributes"]
+                                                                ["station_code"]
+                                                            .toString()),
+                                                        title: Text(allMedia[
+                                                                        "data"][i]
+                                                                    [
+                                                                    "attributes"]
+                                                                ["station_name"]
+                                                            .toString()),
+                                                        subtitle: Text(
+                                                            "NPP:" +
+                                                                allMedia["data"][i]["attributes"]
+                                                                            ["records"]
+                                                                        ["1"]
+                                                                    .toString() +
+                                                                ",NDC: " +
+                                                                allMedia["data"][i]
+                                                                            ["attributes"]["records"]
+                                                                        ["2"]
+                                                                    .toString() +
+                                                                ", Others: " +
+                                                                allMedia["data"][i]
                                                                             [
                                                                             "attributes"]["records"]
                                                                         ["3"]
@@ -487,6 +601,90 @@ class LoginState extends State<Body> {
                                             )
                                         ],
                                       )),
+                            Container(
+                              margin: EdgeInsets.all(20),
+                              child: Column(
+                                children: [
+                                  TextField(
+                                    controller: _searchResult,
+                                    textInputAction: TextInputAction.search,
+                                    decoration: InputDecoration(
+                                      border: OutlineInputBorder(),
+                                      labelText:
+                                          "Search by Polling Station Code",
+                                      hintStyle:
+                                          TextStyle(color: Colors.grey[400]),
+                                      suffixIcon: IconButton(
+                                        icon: Icon(Icons.search, size: 45),
+                                        onPressed: () {
+                                          setState(() {
+                                            searchedData = null;
+                                          });
+                                          _searchResultField(
+                                              _searchResult.text);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+
+                                  if(searchedData != null)
+                                  if(searchedData["data"].length < 1)
+                                    Container(
+                                      child: Center(child: Text("No data found for the searched code"))
+                                    ),
+
+                                  if(searchedData != null)
+                                    for (var i = 0;i <searchedData["data"].length;i++)
+                                      GestureDetector(
+                                        onTap: () {
+                                          _engineViewDetailPage(
+                                              searchedData[
+                                                  "data"][i]);
+                                        },
+                                        child: Container(
+                                          child: ListTile(
+                                            leading: Text(searchedData[
+                                                            "data"][i]
+                                                        [
+                                                        "attributes"]
+                                                    [
+                                                    "station_code"]
+                                                .toString()),
+                                            title: Text(searchedData[
+                                                            "data"][i]
+                                                        [
+                                                        "attributes"]
+                                                    [
+                                                    "station_name"]
+                                                .toString()),
+                                            subtitle: Text(
+                                                "NPP:" +
+                                                    searchedData["data"][i]["attributes"]["records"][
+                                                            "1"]
+                                                        .toString() +
+                                                    ",NDC: " +
+                                                    searchedData["data"][i]["attributes"]["records"][
+                                                            "2"]
+                                                        .toString() +
+                                                    ", Others: " +
+                                                    searchedData["data"][i]["attributes"]["records"][
+                                                            "3"]
+                                                        .toString(),
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        12)),
+                                            trailing: Text(
+                                                "view",
+                                                style: TextStyle(
+                                                    color: Colors
+                                                            .grey[
+                                                        500])),
+                                          ),
+                                        ),
+                                      ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

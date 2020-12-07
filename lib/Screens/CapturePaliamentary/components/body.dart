@@ -6,6 +6,7 @@ import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_plain_field.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
 import 'package:flutter_auth/modals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Body extends StatefulWidget {
   // receive data from the FirstScreen as a parameter
@@ -25,6 +26,7 @@ class BodyState extends State<Body> {
   void initState() {
     super.initState();
 
+    _lostData();
     _parliamentaryCandidates();
   }
 
@@ -34,17 +36,47 @@ class BodyState extends State<Body> {
     super.dispose();
   }
 
+  Map lostData;
+
   _parliamentaryCandidates() async {
+
+    //if
     String data = await MyFunctions.parliamentaryCandidates();
     setState(() {
       candidates = jsonDecode(data)["data"];
     });
 
-    for(var i = 0; i < candidates.length; i++)
-    {
-       String candidateId = candidates[i]["id"].toString();
+    for (var i = 0; i < candidates.length; i++) {
+      String candidateId = candidates[i]["id"].toString();
       result[candidateId] = "0";
     }
+  }
+
+  
+  _lostData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String feedback = prefs.getString("pmLostData");
+    //print(feedback);
+
+    if (feedback == null) return false;
+
+    setState(() {
+      lostData = jsonDecode(feedback);
+    });
+
+    //print(payload);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return ParliamentaryPreview(
+            payload: lostData,
+          );
+        },
+      ),
+    );
+
+    return true;
   }
 
   @override
@@ -136,7 +168,8 @@ class BodyState extends State<Body> {
                                   Container(
                                     child: RoundedInputPlainField(
                                       onChanged: (value) {
-                                        String candidateId = candidates[i]["id"].toString();
+                                        String candidateId =
+                                            candidates[i]["id"].toString();
                                         result[candidateId] = value;
 
                                         //print(result);
@@ -220,6 +253,12 @@ class BodyState extends State<Body> {
                                       "results": post,
                                       "candidates": candidates
                                     };
+
+                                    final SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString(
+                                        "pmLostData", jsonEncode(previewData));
+
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

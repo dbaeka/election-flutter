@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/SavePreviewPage.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/components/rounded_input_plain_field.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
 import 'package:flutter_auth/modals.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 String pollingStationId = "";
 String npp = "0";
@@ -20,10 +23,51 @@ String ndp = "0";
 String indp = "0";
 String remark = "";
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
+  // receive data from the FirstScreen as a parameter
+  Body({Key key}) : super(key: key);
+
+  @override
+  BodyState createState() => BodyState();
+}
+
+class BodyState extends State<Body> {
+/*class Body extends StatelessWidget {
   const Body({
     Key key,
-  });
+  });*/
+
+  @override
+  void initState() {
+    super.initState();
+
+    _lostData();
+  }
+
+  Map lostData;
+  _lostData() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String feedback = prefs.getString("lostData");
+    //print(feedback);
+
+    if (feedback == null) return;
+
+    setState(() {
+      lostData = jsonDecode(feedback);
+    });
+    
+    //print(payload);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return SavePreview(
+            payload: lostData,
+          );
+        },
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -356,12 +400,15 @@ class Body extends StatelessWidget {
                               return;
                             }
 
-                             String stationCode = await MyFunctions.getLoggedInData("station_code");
+                            String stationCode =
+                                await MyFunctions.getLoggedInData(
+                                    "station_code");
 
-                              if (stationCode != pollingStationId) {
-                                toast("Polling station code does not match the logged in User");
-                                return;
-                              }
+                            if (stationCode != pollingStationId) {
+                              toast(
+                                  "Polling station code does not match the logged in User");
+                              return;
+                            }
 
                             Map payload = {
                               "stationId": pollingStationId,
@@ -382,7 +429,11 @@ class Body extends StatelessWidget {
                               "remark": remark
                             };
 
-                            print(payload);
+                            final SharedPreferences prefs =
+                                await SharedPreferences.getInstance();
+                            prefs.setString("lostData", jsonEncode(payload));
+
+                            //print(payload);
                             Navigator.push(
                               context,
                               MaterialPageRoute(

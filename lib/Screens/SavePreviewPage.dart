@@ -40,28 +40,55 @@ class SavePreviewState extends State<SavePreview> {
 
   SizedBox divider = SizedBox(height: 20);
 
+  @override
+  void initState() {
+    super.initState();
+
+    retrieveLostData();
+  }
+
   Future getImageFromCamera() async {
-    final pickedFile = await picker.getImage(source: ImageSource.camera);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        base64Image = base64Encode(_image.readAsBytesSync());
-        filename = basename(_image.path);
-      } else {
-        print('No image selected.');
-      }
-    });
-
     try {
-      if (pickedFile != null && await Permission.storage.request().isGranted) {
-        // Either the permission was already granted before or the user just granted it.
-        GallerySaver.saveImage(_image.path);
+      if (await Permission.camera.request().isGranted) {
+        final pickedFile = await picker.getImage(source: ImageSource.camera);
+
+        setState(() {
+          if (pickedFile != null) {
+            _image = File(pickedFile.path);
+            base64Image = base64Encode(_image.readAsBytesSync());
+            filename = basename(_image.path);
+          } else {
+            print('No image selected.');
+          }
+        });
+
+        if (pickedFile != null &&
+            await Permission.storage.request().isGranted) {
+          // Either the permission was already granted before or the user just granted it.
+          GallerySaver.saveImage(_image.path);
+        }
       }
     } catch (e) {
       toast("Take picture again " + e.toString());
     }
-    //toast(result.toString());
+  }
+
+  Future<void> retrieveLostData() async {
+    final LostData response = await picker.getLostData();
+    if (response.isEmpty) {
+      return;
+    }
+    if (response.file != null) {
+      setState(() {
+        if (response.type == RetrieveType.image) {
+          _image = File(response.file.path);
+          base64Image = base64Encode(_image.readAsBytesSync());
+          filename = basename(_image.path);
+        }
+      });
+    } else {
+      //do nothing
+    }
   }
 
   Future getImageFromGallery() async {

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/components/rounded_button.dart';
 import 'package:flutter_auth/controllers/my-functions.dart';
@@ -59,7 +58,7 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
     //print(id);
     String feedback = await MyFunctions.getSingleResult(id);
 
-    print(feedback);
+   // print(feedback);
     //return;
 
     Map loadedData = jsonDecode(feedback);
@@ -74,6 +73,7 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
           loadedData["data"]["attributes"]["recent_image"];
       payload["recent_result"] = id;
       payload["is_approved"] = loadedData["data"]["attributes"]["is_approved"];
+      payload["media_checked"] = loadedData["data"]["attributes"]["media_checked"];
     });
 
     print(payload);
@@ -98,6 +98,42 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
         context,
         title: decision ? "Approved" : "Rejected",
         subtitle: decision ? "Result approved" : "Result Rejected",
+        style: SweetAlertStyle.success,
+      );
+      return true;
+      //Navigator.pop(context);
+    } else {
+      SweetAlert.show(context,
+          title: "Failed",
+          subtitle: "Action Failed",
+          style: SweetAlertStyle.error);
+
+      return false;
+      //close the main page too
+      // Navigator.pop(context);
+    }
+    //print(feedback);
+  }
+
+   _mediaCheck() async {
+    Map post = {
+      "data": {
+        "id": payload["recent_result"],
+        "type": "results",
+        "attributes": {"media_checked": true}
+      }
+    };
+    //print(payload);
+    showAlertDialog(context,"Pushing to media...." );
+    String feedback = await MyFunctions.acceptReject(post);
+
+    Navigator.pop(context);
+
+    if (feedback == "200") {
+      SweetAlert.show(
+        context,
+        title: "Pushed to media",
+        subtitle: "Result pushed to media",
         style: SweetAlertStyle.success,
       );
       return true;
@@ -482,19 +518,6 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
                                     child: Container(),
                                   ),
                                 ),
-                          /* Card(
-                        child: Container(
-                            height: size.height * 0.90,
-                            width: size.width * 0.90,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: Colors.grey[200],
-                            ),
-                            child: Image.network(payload["recent_image"].toString(),headers: header,
-                              fit: BoxFit.contain,
-                            ) //AssetImage('assets/images/ec-pinksheet.jpg'),
-                            ),
-                      ),*/
                           SizedBox(height: size.height * 0.05),
                           Row(
                             children: <Widget>[
@@ -605,6 +628,60 @@ class AdminViewDetailsState extends State<AdminViewDetails> {
                                             }))),
                             ],
                           ),
+
+                          SizedBox(height: size.height * 0.05),
+
+                          if (payload["media_checked"]== 0)
+                          Container(
+                            margin: EdgeInsets.all(10),
+                            child: RoundedButton(
+                                color: Colors.green[600],
+                                text: "PUSH TO MEDIA",
+                                press: () {
+                                  //print("Approve");
+                                  showAlertDialog(
+                                      BuildContext context) {
+                                    // set up the buttons
+                                    Widget cancelButton =
+                                        FlatButton(
+                                      child: Text("Cancel"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    );
+                                    Widget continueButton =
+                                        FlatButton(
+                                      child: Text("Continue"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+
+                                        _mediaCheck();
+                                      },
+                                    );
+
+                                    // set up the AlertDialog
+                                    AlertDialog alert = AlertDialog(
+                                      title: Text("AlertDialog"),
+                                      content: Text(
+                                          "Are you sure you want to push this result to media?"),
+                                      actions: [
+                                        cancelButton,
+                                        continueButton,
+                                      ],
+                                    );
+
+                                    // show the dialog
+                                    showDialog(
+                                      context: context,
+                                      builder:
+                                          (BuildContext context) {
+                                        return alert;
+                                      },
+                                    );
+                                  }
+
+                                  showAlertDialog(context);
+                          })),
                           SizedBox(height: size.height * 0.05),
                           Row(
                             children: <Widget>[

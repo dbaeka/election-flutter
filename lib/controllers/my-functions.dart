@@ -85,7 +85,8 @@ class MyFunctions {
         "Authorization": "Bearer " + token
       };
       return http
-          .post(api_root + "/pm_results", body: jsonEncode(body), headers: headers)
+          .post(api_root + "/pm_results",
+              body: jsonEncode(body), headers: headers)
           .then((http.Response response) {
         final int statusCode = response.statusCode;
         //print(statusCode);
@@ -125,7 +126,7 @@ class MyFunctions {
     }
   }
 
-   static Future<String> savePmImage(Map body) async {
+  static Future<String> savePmImage(Map body) async {
     try {
       String token = await getToken();
 
@@ -139,10 +140,6 @@ class MyFunctions {
               body: jsonEncode(body), headers: headers)
           .then((http.Response response) {
         final int statusCode = response.statusCode;
-
-        //String returnVal = (response.body == null) ? "" : response.body;
-
-        //print("image2" + returnVal);
 
         return statusCode.toString();
       }).catchError((error) =>
@@ -177,7 +174,7 @@ class MyFunctions {
     }
   }
 
-   static Future<String> getUploadHistoryPm() async {
+  static Future<String> getUploadHistoryPm() async {
     try {
       String token = await getToken();
 
@@ -245,12 +242,13 @@ class MyFunctions {
     return token;
   }
 
-static getLoggedInData(String field) async {
+  static getLoggedInData(String field) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String info = jsonDecode(prefs.getString("login"))[field];
     //print(token);
     return info;
   }
+
   static Future<String> getAllResults() async {
     try {
       String token = await getToken();
@@ -313,6 +311,7 @@ static getLoggedInData(String field) async {
       };
       return http
           .get(api_root + "/stations/new?page[size]=30", headers: headers)
+          //.get(api_root + "/stations", headers: headers)
           .then((http.Response response) {
         //final int statusCode = response.statusCode;
 
@@ -339,12 +338,51 @@ static getLoggedInData(String field) async {
       return http
           .get(api_root + "/stations/old?page[size]=30", headers: headers)
           .then((http.Response response) {
-        //final int statusCode = response.statusCode;
-
         String returnVal = (response.body == null) ? "" : response.body;
 
         //print(returnVal);
+        return returnVal;
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }
 
+  static Future<String> getAllMedia() async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .get(api_root + "/stations/media", headers: headers)
+          .then((http.Response response) {
+        String returnVal = (response.body == null) ? "" : response.body;
+        return returnVal;
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }
+
+  //searchResult
+
+    static Future<String> searchResult(String search) async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .get(api_root + "/results?filter[station_code]=" + search, headers: headers)
+          .then((http.Response response) {
+        String returnVal = (response.body == null) ? "" : response.body;
         return returnVal;
       }).catchError((error) =>
               print("Server not reached: Error Msg:" + error.toString()));
@@ -408,9 +446,9 @@ static getLoggedInData(String field) async {
   static Future<String> acceptReject(Map body) async {
     try {
       String token = await getToken();
-      print(body);
-      print(token);
-      print(api_root + "/results");
+      //print(body);
+      //print(token);
+      //print(api_root + "/results");
 
       Map<String, String> headers = {
         "Content-Type": "application/json",
@@ -423,11 +461,11 @@ static getLoggedInData(String field) async {
           .then((http.Response response) {
         final int statusCode = response.statusCode;
 
-        print(statusCode);
+        //print(statusCode);
 
-        String returnVal = (response.body == null) ? "" : response.body;
+        //String returnVal = (response.body == null) ? "" : response.body;
 
-        print(returnVal);
+        //print(returnVal);
 
         return statusCode.toString();
       }).catchError((error) =>
@@ -436,6 +474,29 @@ static getLoggedInData(String field) async {
       return '{"data":null}';
     }
   }
+
+  /*static Future<String> mediaCheck(Map body) async {
+    try {
+      String token = await getToken();
+
+      Map<String, String> headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Authorization": "Bearer " + token
+      };
+      return http
+          .patch(api_root + "/results",
+              body: jsonEncode(body), headers: headers)
+          .then((http.Response response) {
+        final int statusCode = response.statusCode;
+
+        return statusCode.toString();
+      }).catchError((error) =>
+              print("Server not reached: Error Msg:" + error.toString()));
+    } catch (_) {
+      return '{"data":null}';
+    }
+  }*/
 
   static Future<String> getElectionResult() async {
     try {
@@ -468,7 +529,6 @@ static getLoggedInData(String field) async {
       return http
           .get(api_root + "/pm_candidates", headers: headers)
           .then((http.Response response) {
-
         String returnVal = (response.body == null) ? "" : response.body;
 
         return returnVal;
