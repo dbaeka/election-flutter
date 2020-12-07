@@ -172,7 +172,7 @@ class TVRoomState extends State<TVRoomScreen> {
                       style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: Colors.black,
-                              fontSize: 7.5.sp,
+                              fontSize: 5.5.sp,
                               fontWeight: FontWeight.w400))),
                   Container(
                     margin: EdgeInsets.only(top: 6, bottom: 2),
@@ -244,7 +244,7 @@ class TVRoomState extends State<TVRoomScreen> {
                       style: GoogleFonts.montserrat(
                           textStyle: TextStyle(
                               color: Colors.black,
-                              fontSize: 7.5.sp,
+                              fontSize: 5.5.sp,
                               fontWeight: FontWeight.w400))),
                   Container(
                     margin: EdgeInsets.only(top: 6, bottom: 2),

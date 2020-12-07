@@ -250,7 +250,7 @@ class LoginState extends State<Body> {
 
                       feedbackMsg = await MyFunctions.loggIn(post);
 
-                      //print(feedbackMsg);
+                      print(feedbackMsg);
 
                       Navigator.pop(context);
 

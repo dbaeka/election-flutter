@@ -19,8 +19,7 @@ class ParliamentaryPreview extends StatefulWidget {
   ParliamentaryPreview({Key key, @required this.payload}) : super(key: key);
 
   @override
-  ParliamentaryPreviewState createState() =>
-      ParliamentaryPreviewState(payload: payload);
+  ParliamentaryPreviewState createState() => ParliamentaryPreviewState(payload: payload);
 }
 
 class ParliamentaryPreviewState extends State<ParliamentaryPreview> {
